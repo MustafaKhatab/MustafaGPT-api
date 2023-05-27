@@ -16,8 +16,11 @@ const handleUserMessage = asyncHandler(async (req, res) => {
   const prompt = chat.messages;
 
   // Send user message to ChatGPT API
-  const chatGptResponse = await getChatGptResponse(prompt);
+  try{
 
+  
+  const chatGptResponse = await getChatGptResponse(prompt);
+  
   // Prepare the chatbot response object
   const botResponse = {
     role: "assistant",
@@ -39,6 +42,12 @@ const handleUserMessage = asyncHandler(async (req, res) => {
 
   // Return the chatbot response to the client
   res.json(chat);
+}
+catch(error){
+  return res.status(500).json({ message: "Failed to retrieve ChatGPT response" });
+
+}
+
 });
 
 const handleUserMessageAndCreation = asyncHandler(async (req, res) => {
@@ -52,6 +61,9 @@ const handleUserMessageAndCreation = asyncHandler(async (req, res) => {
     return res.status(404).json({ message: "User not found" });
   }
 
+
+
+  try{
   // Send user message to ChatGPT API
   const chatGptResponse = await getChatGptResponse([prompt]);
 
@@ -76,6 +88,10 @@ const handleUserMessageAndCreation = asyncHandler(async (req, res) => {
   } else {
     res.status(400).json({ message: "Invalid chat data received" });
   }
+}catch(error){
+  return res.status(500).json({ message: "Failed to retrieve ChatGPT response" });
+
+}
 });
 
 // @desc Get all notes

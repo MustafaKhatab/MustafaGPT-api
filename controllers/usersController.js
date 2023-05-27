@@ -61,6 +61,17 @@ const createNewUser = asyncHandler(async (req, res) => {
     } else {
         res.status(400).json({ message: 'Invalid user data received' })
     }
+    const newChat = new Chat({
+        user: user._id,
+        title: "New Chat",
+        messages: [],
+      });
+    
+      // Save the new chat
+      const savedChat = await newChat.save();
+      if (!savedChat) {
+        res.status(400).json({ message: "Invalid chat data received" });
+      }
 })
 
 // @desc Update a user
